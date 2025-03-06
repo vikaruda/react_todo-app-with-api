@@ -6,11 +6,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { UserWarning } from './UserWarning';
 import * as todosService from './api/todos';
 import { Todo } from './types/Todo';
-import classNames from 'classnames';
 import { Header } from './components/Header';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/Footer';
 import { TodoFilter } from './types/FilterEnum';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   const [creatNewTodos, setCreateNewTodos] = useState('');
@@ -70,19 +70,16 @@ export const App: React.FC = () => {
       completed: false,
     };
 
-    const tempTodoItem = { ...newTodo, id: Date.now() };
-
-    setTodoItem(prev => [...prev, tempTodoItem]);
-    setArrTodos(prevItem => [...prevItem, tempTodoItem.id]);
     setLoadingNewItem(true);
 
     todosService
       .createPost(newTodo)
       .then(createdTodo => {
         setCreateNewTodos('');
-        setArrTodos(prevItem =>
-          prevItem.map(id => (id === tempTodoItem.id ? createdTodo.id : id)),
-        );
+
+        setTodoItem(prev => [...prev, createdTodo]);
+
+        setArrTodos(prevItem => [...prevItem, createdTodo.id]);
       })
       .catch(() => {
         setStateError('Unable to add a todo');
@@ -210,23 +207,7 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          {
-            'hidden': !errorState,
-          },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setStateError('')}
-        />
-        {errorState}
-      </div>
+      <ErrorNotification errorState={errorState} setStateError={setStateError}/>
     </div>
   );
 };

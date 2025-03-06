@@ -24,6 +24,7 @@ export const TodoItem: React.FC<TodoIt> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(tempTodo.title);
+  const [loader, setLoader] = useState(false);
 
   const toggleTodo = (id: number) => {
     setControlChecked(prev =>
@@ -55,10 +56,6 @@ export const TodoItem: React.FC<TodoIt> = ({
 
   const isLoading = arrTodos.includes(tempTodo.id) || delLoader === tempTodo.id;
 
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
   const handleEditSubmit = () => {
     if (!editValue.trim()) {
       handleTodoDelete(tempTodo.id);
@@ -67,6 +64,9 @@ export const TodoItem: React.FC<TodoIt> = ({
     }
 
     const updatedTodo = { ...tempTodo, title: editValue };
+
+    // Увімкнення лоадера
+    setLoader(true);
 
     todosService
       .updatePost(updatedTodo)
@@ -80,6 +80,7 @@ export const TodoItem: React.FC<TodoIt> = ({
       })
       .finally(() => {
         setIsEditing(false);
+        setLoader(false); // Вимкнення лоадера
       });
   };
 
@@ -127,7 +128,7 @@ export const TodoItem: React.FC<TodoIt> = ({
           <span
             data-cy="TodoTitle"
             className="todo__title"
-            onDoubleClick={handleEdit}
+            onDoubleClick={handleEditSubmit}
           >
             {tempTodo.title}
           </span>
@@ -142,7 +143,9 @@ export const TodoItem: React.FC<TodoIt> = ({
           ×
         </button>
 
-        <TodoLoader isActive={isLoading || delLoader === tempTodo.id} />
+        <TodoLoader
+          isActive={isLoading || delLoader === tempTodo.id || loader}
+        />
       </div>
     </div>
   );

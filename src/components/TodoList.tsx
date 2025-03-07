@@ -1,6 +1,7 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
+import { TodoLoader } from './TodoLoader';
 
 interface List {
   tempTodo: Todo | null;
@@ -23,8 +24,21 @@ export const TodoList: React.FC<List> = ({
   arrTodos,
   delLoader,
 }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (tempTodo) {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+  }, [tempTodo]);
+
   return (
     <>
+      <TodoLoader isActive={isLoading} />
+
       {tempTodo && (
         <TodoItem
           tempTodo={tempTodo}

@@ -25,6 +25,8 @@ export const App: React.FC = () => {
   const [arrTodos, setArrTodos] = useState<number[]>([]);
   const [delLoader, setDelLoader] = useState<number | null>(null);
   const activeCount = todoItem.filter(todo => !todo.completed);
+  const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+
 
   useEffect(() => {
     todosService
@@ -36,10 +38,10 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (errorState) {
       const timer = setTimeout(() => {
-        setStateError(''); // Clear the error message after 3 seconds
+        setStateError('');
       }, 3000);
 
-      return () => clearTimeout(timer); // Clean up timer if component unmounts
+      return () => clearTimeout(timer);
     }
   }, [errorState]);
 
@@ -61,6 +63,8 @@ export const App: React.FC = () => {
     event.preventDefault();
 
     if (creatNewTodos.trim() === '') {
+      setStateError('Title should not be empty');
+
       return;
     }
 
@@ -70,15 +74,19 @@ export const App: React.FC = () => {
       completed: false,
     };
 
+    const tempTodo2: Todo = {
+      id: Date.now(),
+      ...newTodo,
+    };
+
+    setTempTodo(tempTodo2);
     setLoadingNewItem(true);
 
     todosService
       .createPost(newTodo)
       .then(createdTodo => {
         setCreateNewTodos('');
-
         setTodoItem(prev => [...prev, createdTodo]);
-
         setArrTodos(prevItem => [...prevItem, createdTodo.id]);
       })
       .catch(() => {
@@ -86,6 +94,7 @@ export const App: React.FC = () => {
       })
       .finally(() => {
         setLoadingNewItem(false);
+        setTempTodo(null);
         setTimeout(() => {
           setArrTodos([]);
         }, 1000);
@@ -186,7 +195,7 @@ export const App: React.FC = () => {
         <section className="todoapp__main" data-cy="TodoList">
           <TodoList
             todos={filteredTodos}
-            tempTodo={null}
+            tempTodo={tempTodo}
             controlChecked={controlChecked}
             setControlChecked={setControlChecked}
             setTodoItem={setTodoItem}

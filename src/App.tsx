@@ -59,14 +59,10 @@ export const App: React.FC = () => {
   const filteredTodos = getFilteredTodos();
 
   useEffect(() => {
-    if (inputRef.current) {
-      const timer = setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100); // Add a small delay
-
-      return () => clearTimeout(timer);
+    if (inputRef.current && errorState) {
+      inputRef.current.focus();
     }
-  }, [todoItem]);
+  }, [errorState]);
 
 
   const handleForm = (event: React.FormEvent) => {

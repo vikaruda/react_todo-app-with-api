@@ -27,7 +27,6 @@ export const App: React.FC = () => {
   const activeCount = todoItem.filter(todo => !todo.completed);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
 
-
   useEffect(() => {
     todosService
       .getTodos()
@@ -59,10 +58,23 @@ export const App: React.FC = () => {
 
   const filteredTodos = getFilteredTodos();
 
+  useEffect(() => {
+    if (inputRef.current) {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100); // Add a small delay
+
+      return () => clearTimeout(timer);
+    }
+  }, [todoItem]);
+
+
   const handleForm = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (creatNewTodos.trim() === '') {
+    const trimmedTitle = creatNewTodos.trim();
+
+    if (trimmedTitle === '') {
       setStateError('Title should not be empty');
 
       return;
@@ -70,7 +82,7 @@ export const App: React.FC = () => {
 
     const newTodo: Omit<Todo, 'id'> = {
       userId,
-      title: creatNewTodos,
+      title: trimmedTitle,
       completed: false,
     };
 
@@ -88,13 +100,17 @@ export const App: React.FC = () => {
         setCreateNewTodos('');
         setTodoItem(prev => [...prev, createdTodo]);
         setArrTodos(prevItem => [...prevItem, createdTodo.id]);
+
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
       })
       .catch(() => {
         setStateError('Unable to add a todo');
       })
       .finally(() => {
-        setLoadingNewItem(false);
-        setTempTodo(null);
+        setLoadingNewItem(false); // Stop loading
+        setTempTodo(null); // Reset tempTodo
         setTimeout(() => {
           setArrTodos([]);
         }, 1000);
@@ -109,7 +125,6 @@ export const App: React.FC = () => {
     // фільтруємо значення які не є комплітед, щоб їх видалити
     // ще тут ми показуємо видалені елементи локкально
     setTodoItem(prev => prev.filter(todo => !completedIds.includes(todo.id)));
-
 
     // перебираємо комплітед і вибраними айдішниками та видялаємо їх за допомогою методу
     // а тут ми видаляємо елементи із серверу
@@ -216,7 +231,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <ErrorNotification errorState={errorState} setStateError={setStateError}/>
+      <ErrorNotification
+        errorState={errorState}
+        setStateError={setStateError}
+      />
     </div>
   );
 };

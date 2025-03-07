@@ -1,7 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Todo } from '../types/Todo';
 import { TodoItem } from './TodoItem';
-import { TodoLoader } from './TodoLoader';
 
 interface List {
   tempTodo: Todo | null;
@@ -24,6 +23,7 @@ export const TodoList: React.FC<List> = ({
   arrTodos,
   delLoader,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -37,7 +37,19 @@ export const TodoList: React.FC<List> = ({
 
   return (
     <>
-      <TodoLoader isActive={isLoading} />
+      {todos.map(todo => (
+        <TodoItem
+          key={todo.id}
+          isTempTodo={false}
+          tempTodo={todo}
+          controlChecked={controlChecked}
+          setControlChecked={setControlChecked}
+          setTodoItem={setTodoItem}
+          handleTodoDelete={handleTodoDelete}
+          arrTodos={arrTodos}
+          delLoader={delLoader}
+        />
+      ))}
 
       {tempTodo && (
         <TodoItem
@@ -48,21 +60,9 @@ export const TodoList: React.FC<List> = ({
           handleTodoDelete={handleTodoDelete}
           arrTodos={arrTodos}
           delLoader={delLoader}
+          isTempTodo={true}
         />
       )}
-
-      {todos.map(todo => (
-        <TodoItem
-          key={todo.id}
-          tempTodo={todo}
-          controlChecked={controlChecked}
-          setControlChecked={setControlChecked}
-          setTodoItem={setTodoItem}
-          handleTodoDelete={handleTodoDelete}
-          arrTodos={arrTodos}
-          delLoader={delLoader}
-        />
-      ))}
     </>
   );
 };

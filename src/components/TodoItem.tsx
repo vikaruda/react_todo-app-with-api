@@ -6,6 +6,7 @@ import * as todosService from '../api/todos';
 
 interface TodoIt {
   tempTodo: Todo;
+  isTempTodo: boolean;
   controlChecked: number[];
   setControlChecked: Dispatch<SetStateAction<number[]>>;
   setTodoItem: Dispatch<SetStateAction<Todo[]>>;
@@ -16,6 +17,7 @@ interface TodoIt {
 
 export const TodoItem: React.FC<TodoIt> = ({
   tempTodo,
+  isTempTodo,
   setControlChecked,
   setTodoItem,
   handleTodoDelete,
@@ -144,7 +146,9 @@ export const TodoItem: React.FC<TodoIt> = ({
         </button>
 
         <TodoLoader
-          isActive={isLoading || delLoader === tempTodo.id || loader}
+          isActive={
+            isLoading || delLoader === tempTodo.id || loader || isTempTodo
+          }
         />
       </div>
     </div>

@@ -58,11 +58,16 @@ export const App: React.FC = () => {
 
   const filteredTodos = getFilteredTodos();
 
+  // useEffect(() => {
+  //   if (inputRef.current && errorState) {
+  //     inputRef.current.focus();
+  //   }
+  // }, [errorState]);
+
   useEffect(() => {
-    if (inputRef.current && errorState) {
-      inputRef.current.focus();
-    }
-  }, [errorState]);
+    inputRef.current?.focus();
+  }, [todoItem]);
+
 
 
   const handleForm = (event: React.FormEvent) => {
@@ -97,9 +102,7 @@ export const App: React.FC = () => {
         setTodoItem(prev => [...prev, createdTodo]);
         setArrTodos(prevItem => [...prevItem, createdTodo.id]);
 
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
+        inputRef.current?.focus();
       })
       .catch(() => {
         setStateError('Unable to add a todo');

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 
 interface HeaderProps {
   handleForm: (event: React.FormEvent) => void;
@@ -17,6 +17,12 @@ export const Header: React.FC<HeaderProps> = ({
   inputRef,
   loadingNewItem,
 }) => {
+  useEffect(() => {
+    if (!loadingNewItem && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [loadingNewItem]);
+
   return (
     <header className="todoapp__header">
       {/* this button should have active class only if all todos are completed */}

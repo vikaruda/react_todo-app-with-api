@@ -117,22 +117,22 @@ export const App: React.FC = () => {
   };
 
   const forClearCompleted = () => {
-    // перебираємо значення комплітед, а потім комплітед сортуємо по айді
     const completedTodo = todoItem.filter(todo => todo.completed);
     const completedIds = completedTodo.map(todo => todo.id);
 
-    // фільтруємо значення які не є комплітед, щоб їх видалити
-    // ще тут ми показуємо видалені елементи локкально
     setTodoItem(prev => prev.filter(todo => !completedIds.includes(todo.id)));
 
-    // перебираємо комплітед і вибраними айдішниками та видялаємо їх за допомогою методу
-    // а тут ми видаляємо елементи із серверу
-    // completedIds.forEach(id => {
-    //   todosService.deleteTodos(id).catch(() => {
-    //     setTimeout(() => setStateError(''), 3000);
-    //   });
-    // });
+    Promise.allSettled(completedIds.map(id => todosService.deleteTodos(id)))
+      .then(results => {
+        const failed = results.some(result => result.status === 'rejected');
+
+        if (failed) {
+          setStateError('Unable to delete a todo'); // Consistent message
+        }
+      });
   };
+
+
 
   const errorGetTodos = () => {
     setStateError('');
@@ -148,25 +148,20 @@ export const App: React.FC = () => {
   };
 
   const handleTodoDelete = (usersId: number) => {
-    setArrTodos(prevItem => prevItem.filter(id => id !== usersId));
-    setDelLoader(userId);
+    setDelLoader(usersId);
     todosService
       .deleteTodos(usersId)
       .then(() => {
-        setTodoItem(prevTodos => prevTodos.filter(todo => todo.id !== usersId));
-        setDelLoader(usersId);
+        setTodoItem(prev => prev.filter(todo => todo.id !== usersId));
       })
       .catch(() => {
-        setStateError('Unable to delete a todo ');
-        setTimeout(() => setStateError(''), 3000);
+        setStateError('Unable to delete a todo');
       })
       .finally(() => {
-        setTimeout(() => {
-          setDelLoader(null);
-          setArrTodos(prev => prev.filter(id => id !== usersId));
-        }, 1000);
+        setTimeout(() => setDelLoader(null), 1000);
       });
   };
+
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const updatedPost = (updatedPosts: Todo) => {

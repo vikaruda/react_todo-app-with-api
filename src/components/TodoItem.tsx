@@ -41,6 +41,7 @@ export const TodoItem: React.FC<TodoIt> = ({
 
     const todoToUpdate = { ...tempTodo, completed: !tempTodo.completed };
 
+    setLoader(true);
     todosService
       .updatePost(todoToUpdate)
       .catch(() => {
@@ -53,6 +54,7 @@ export const TodoItem: React.FC<TodoIt> = ({
       })
       .finally(() => {
         setControlChecked(prev => prev.filter(todoId => todoId !== id));
+        setLoader(false);
       });
   };
 

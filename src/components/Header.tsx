@@ -7,6 +7,8 @@ interface HeaderProps {
   createNewTodos: string;
   inputRef: React.RefObject<HTMLInputElement>;
   loadingNewItem: boolean;
+  toggleAllTodos: () => void;
+  chooseAllItem: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,6 +18,8 @@ export const Header: React.FC<HeaderProps> = ({
   createNewTodos,
   inputRef,
   loadingNewItem,
+  toggleAllTodos,
+  chooseAllItem,
 }) => {
   useEffect(() => {
     if (!loadingNewItem && inputRef.current) {
@@ -27,10 +31,10 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="todoapp__header">
       <button
         type="button"
-        className="todoapp__toggle-all active"
+        className={`todoapp__toggle-all ${chooseAllItem ? 'active' : ''}`}
         data-cy="ToggleAllButton"
+        onClick={toggleAllTodos}
       />
-
       <form
         onSubmit={event => {
           handleForm(event);

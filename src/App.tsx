@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
@@ -25,6 +26,7 @@ export const App: React.FC = () => {
   const [delLoader, setDelLoader] = useState<number | null>(null);
   const activeCount = todoItem.filter(todo => !todo.completed);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
+  const [chooseAllItem, setChooseAllItem] = useState(false);
 
   useEffect(() => {
     todosService
@@ -170,6 +172,17 @@ export const App: React.FC = () => {
       });
   };
 
+  const toggleAllTodos = () => {
+    const allCompleted = todoItem.every(todo => todo.completed);
+    const updatedTodos = todoItem.map(todo => ({
+      ...todo,
+      completed: !allCompleted,
+    }));
+
+    setTodoItem(updatedTodos);
+    setChooseAllItem(!allCompleted);
+  };
+
   if (!todosService.USER_ID) {
     return <UserWarning />;
   }
@@ -186,6 +199,8 @@ export const App: React.FC = () => {
           createNewTodos={creatNewTodos}
           inputRef={inputRef}
           loadingNewItem={loadingNewItem}
+          toggleAllTodos={toggleAllTodos}
+          chooseAllItem={chooseAllItem}
         />
 
         <section className="todoapp__main" data-cy="TodoList">

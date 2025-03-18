@@ -132,20 +132,22 @@ export const TodoItem: React.FC<TodoIt> = ({
           <span
             data-cy="TodoTitle"
             className="todo__title"
-            onDoubleClick={handleEditSubmit}
+            onDoubleClick={() => setIsEditing(true)}
           >
             {tempTodo.title}
           </span>
         )}
 
-        <button
-          type="button"
-          className="todo__remove"
-          data-cy="TodoDelete"
-          onClick={() => handleTodoDelete(tempTodo.id)}
-        >
-          ×
-        </button>
+        {!isEditing && (
+          <button
+            type="button"
+            className="todo__remove"
+            data-cy="TodoDelete"
+            onClick={() => handleTodoDelete(tempTodo.id)}
+          >
+            ×
+          </button>
+        )}
 
         <TodoLoader
           isActive={

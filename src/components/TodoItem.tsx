@@ -29,28 +29,27 @@ export const TodoItem: React.FC<TodoIt> = ({
   const [loader, setLoader] = useState(false);
 
   const toggleTodo = (id: number) => {
+    // Локально змінюємо стан чекбокса, щоб дати миттєвий візуальний фідбек
     setControlChecked(prev =>
       prev.includes(id) ? prev.filter(todoId => todoId !== id) : [...prev, id],
-    );
-
-    setTodoItem(prevItems =>
-      prevItems.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
     );
 
     const todoToUpdate = { ...tempTodo, completed: !tempTodo.completed };
 
     setLoader(true);
+
     todosService
       .updatePost(todoToUpdate)
-      .catch(() => {
-        alert('Unable to update a todo');
+      .then(() => {
+        // Оновлюємо список тудушок тільки після успішного запиту
         setTodoItem(prevItems =>
           prevItems.map(todo =>
             todo.id === id ? { ...todo, completed: !todo.completed } : todo,
           ),
         );
+      })
+      .catch(() => {
+        alert('Unable to update a todo');
       })
       .finally(() => {
         setControlChecked(prev => prev.filter(todoId => todoId !== id));

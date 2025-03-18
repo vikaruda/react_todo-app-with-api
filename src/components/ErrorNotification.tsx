@@ -13,12 +13,9 @@ export const ErrorNotification: React.FC<ErrorInterface> = ({
   return (
     <div
       data-cy="ErrorNotification"
-      className={classNames(
-        'notification is-danger is-light has-text-weight-normal',
-        {
-          hidden: !errorState,
-        },
-      )}
+      className={classNames('notification is-danger is-light', {
+        hidden: !errorState,
+      })}
     >
       <button
         data-cy="HideErrorButton"

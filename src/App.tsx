@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
@@ -67,8 +66,6 @@ export const App: React.FC = () => {
   useEffect(() => {
     inputRef.current?.focus();
   }, [todoItem]);
-
-
 
   const handleForm = (event: React.FormEvent) => {
     event.preventDefault();
@@ -153,7 +150,6 @@ export const App: React.FC = () => {
     return;
   };
 
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const updatedPost = (updatedPosts: Todo) => {
     todosService
@@ -181,7 +177,6 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-
 
       <div className="todoapp__content">
         <Header

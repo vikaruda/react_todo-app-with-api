@@ -116,24 +116,6 @@ export const App: React.FC = () => {
       });
   };
 
-  const forClearCompleted = () => {
-    const completedTodo = todoItem.filter(todo => todo.completed);
-    const completedIds = completedTodo.map(todo => todo.id);
-
-    setTodoItem(prev => prev.filter(todo => !completedIds.includes(todo.id)));
-
-    Promise.allSettled(completedIds.map(id => todosService.deleteTodos(id)))
-      .then(results => {
-        const failed = results.some(result => result.status === 'rejected');
-
-        if (failed) {
-          setStateError('Unable to delete a todo'); // Consistent message
-        }
-      });
-  };
-
-
-
   const errorGetTodos = () => {
     setStateError('');
 
@@ -160,6 +142,15 @@ export const App: React.FC = () => {
       .finally(() => {
         setTimeout(() => setDelLoader(null), 1000);
       });
+  };
+
+  const forClearCompleted = () => {
+    const completedTodo = todoItem.filter(todo => todo.completed);
+    const completedIds = completedTodo.map(todo => todo.id);
+
+    Promise.allSettled(completedIds.map(id => handleTodoDelete(id)));
+
+    return;
   };
 
 
@@ -190,6 +181,7 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
+
 
       <div className="todoapp__content">
         <Header

@@ -33,7 +33,9 @@ export const Header: React.FC<HeaderProps> = ({
         type="button"
         className={`todoapp__toggle-all ${chooseAllItem ? 'active' : ''}`}
         data-cy="ToggleAllButton"
-        onClick={toggleAllTodos}
+        onClick={() => {
+          toggleAllTodos();
+        }}
       />
       <form
         onSubmit={event => {

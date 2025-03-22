@@ -27,6 +27,7 @@ export const App: React.FC = () => {
   const activeCount = todoItem.filter(todo => !todo.completed);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [chooseAllItem, setChooseAllItem] = useState(false);
+  const [loaderApi, setLoaderApi] = useState(false);
 
   useEffect(() => {
     todosService
@@ -179,9 +180,27 @@ export const App: React.FC = () => {
       completed: !allCompleted,
     }));
 
-    setTodoItem(updatedTodos);
-    setChooseAllItem(!allCompleted);
+    setLoaderApi(true);
+
+    // Масив промісів для оновлення кожного туду
+    const updatePromises = updatedTodos.map(todo =>
+      todosService.updatePost(todo)
+    );
+
+    // Очікуємо, поки всі оновлення завершаться
+    Promise.all(updatePromises)
+      .then(() => {
+        setTodoItem(updatedTodos); // Оновлюємо список тільки після успішного оновлення всіх тудушок
+        setChooseAllItem(!allCompleted);
+      })
+      .catch(() => {
+        alert('Unable to update todos');
+      })
+      .finally(() => {
+        setLoaderApi(false);
+      });
   };
+
 
   if (!todosService.USER_ID) {
     return <UserWarning />;
@@ -213,6 +232,8 @@ export const App: React.FC = () => {
             handleTodoDelete={handleTodoDelete}
             arrTodos={arrTodos}
             delLoader={delLoader}
+            toggleAllTodos={toggleAllTodos}
+            loaderApi={loaderApi}
           />
         </section>
 

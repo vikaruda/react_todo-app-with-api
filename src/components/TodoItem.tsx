@@ -13,6 +13,8 @@ interface TodoIt {
   handleTodoDelete: (usersId: number) => void;
   arrTodos: number[];
   delLoader: number | null;
+  toggleAllTodos: () => void;
+  loaderApi: boolean;
 }
 
 export const TodoItem: React.FC<TodoIt> = ({
@@ -23,6 +25,8 @@ export const TodoItem: React.FC<TodoIt> = ({
   handleTodoDelete,
   arrTodos,
   delLoader,
+  toggleAllTodos,
+  loaderApi,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(tempTodo.title);
@@ -99,7 +103,10 @@ export const TodoItem: React.FC<TodoIt> = ({
         <label
           className="todo__status-label"
           aria-label="Toggle status"
-          onClick={() => toggleTodo(tempTodo.id)}
+          onClick={() => {
+            toggleTodo(tempTodo.id);
+            toggleAllTodos();
+          }}
         >
           <input
             data-cy="TodoStatus"
@@ -150,7 +157,11 @@ export const TodoItem: React.FC<TodoIt> = ({
 
         <TodoLoader
           isActive={
-            isLoading || delLoader === tempTodo.id || loader || isTempTodo
+            isLoading ||
+            delLoader === tempTodo.id ||
+            loader ||
+            isTempTodo ||
+            loaderApi
           }
         />
       </div>

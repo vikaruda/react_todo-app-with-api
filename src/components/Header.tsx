@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import { Todo } from '../types/Todo';
 
 interface HeaderProps {
   handleForm: (event: React.FormEvent) => void;
@@ -9,6 +10,7 @@ interface HeaderProps {
   loadingNewItem: boolean;
   toggleAllTodos: () => void;
   chooseAllItem: boolean;
+  todoItem: Todo[];
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -20,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
   loadingNewItem,
   toggleAllTodos,
   chooseAllItem,
+  todoItem,
 }) => {
   useEffect(() => {
     if (!loadingNewItem && inputRef.current) {
@@ -29,10 +32,10 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="todoapp__header">
-      {!loadingNewItem && (
+      {todoItem.length > 0 && !loadingNewItem && (
         <button
           type="button"
-          className={`todoapp__toggle-all ${chooseAllItem ? 'active' : ''}`}
+          className={`todoapp__toggle-all${chooseAllItem ? 'active' : ''}`}
           data-cy="ToggleAllButton"
           onClick={toggleAllTodos}
         />

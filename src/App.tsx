@@ -221,6 +221,7 @@ export const App: React.FC = () => {
           loadingNewItem={loadingNewItem}
           toggleAllTodos={toggleAllTodos}
           chooseAllItem={chooseAllItem}
+          todoItem={todoItem}
         />
 
         <section className="todoapp__main" data-cy="TodoList">

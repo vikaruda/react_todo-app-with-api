@@ -15,6 +15,7 @@ interface TodoIt {
   delLoader: number | null;
   toggleAllTodos: () => void;
   loaderApi: boolean;
+  updatedPost: (updatedPosts: Todo) => void;
 }
 
 export const TodoItem: React.FC<TodoIt> = ({
@@ -27,6 +28,7 @@ export const TodoItem: React.FC<TodoIt> = ({
   delLoader,
   toggleAllTodos,
   loaderApi,
+  updatedPost,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(tempTodo.title);
@@ -51,9 +53,6 @@ export const TodoItem: React.FC<TodoIt> = ({
             todo.id === id ? { ...todo, completed: !todo.completed } : todo,
           ),
         );
-      })
-      .catch(() => {
-        alert('Unable to update a todo');
       })
       .finally(() => {
         setControlChecked(prev => prev.filter(todoId => todoId !== id));
@@ -82,12 +81,9 @@ export const TodoItem: React.FC<TodoIt> = ({
           prevItems.map(todo => (todo.id === tempTodo.id ? updatedTodo : todo)),
         );
       })
-      .catch(() => {
-        alert('Failed to update the todo');
-      })
       .finally(() => {
         setIsEditing(false);
-        setLoader(false); // Вимкнення лоадера
+        setLoader(false);
       });
   };
 
@@ -104,8 +100,11 @@ export const TodoItem: React.FC<TodoIt> = ({
           className="todo__status-label"
           aria-label="Toggle status"
           onClick={() => {
+            const updatedTodo = { ...tempTodo, completed: !tempTodo.completed };
+
             toggleTodo(tempTodo.id);
             toggleAllTodos();
+            updatedPost(updatedTodo);
           }}
         >
           <input

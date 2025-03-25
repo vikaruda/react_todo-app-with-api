@@ -13,6 +13,7 @@ interface List {
   delLoader: number | null;
   toggleAllTodos: () => void;
   loaderApi: boolean;
+  updatedPost: (updatedPosts: Todo) => void;
 }
 
 export const TodoList: React.FC<List> = ({
@@ -26,6 +27,7 @@ export const TodoList: React.FC<List> = ({
   delLoader,
   toggleAllTodos,
   loaderApi,
+  updatedPost,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -54,6 +56,7 @@ export const TodoList: React.FC<List> = ({
           delLoader={delLoader}
           toggleAllTodos={toggleAllTodos}
           loaderApi={loaderApi}
+          updatedPost={updatedPost}
         />
       ))}
 
@@ -69,6 +72,7 @@ export const TodoList: React.FC<List> = ({
           isTempTodo={true}
           toggleAllTodos={toggleAllTodos}
           loaderApi={loaderApi}
+          updatedPost={updatedPost}
         />
       )}
     </>

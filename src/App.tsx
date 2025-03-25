@@ -30,6 +30,8 @@ export const App: React.FC = () => {
   const [loaderApi, setLoaderApi] = useState(false);
 
   useEffect(() => {
+    // 1133 change
+    setStateError('');
     todosService
       .getTodos()
       .then(setTodoItem)
@@ -59,12 +61,6 @@ export const App: React.FC = () => {
   };
 
   const filteredTodos = getFilteredTodos();
-
-  // useEffect(() => {
-  //   if (inputRef.current && errorState) {
-  //     inputRef.current.focus();
-  //   }
-  // }, [errorState]);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -239,6 +235,7 @@ export const App: React.FC = () => {
             delLoader={delLoader}
             toggleAllTodos={toggleAllTodos}
             loaderApi={loaderApi}
+            updatedPost={updatedPost}
           />
         </section>
 

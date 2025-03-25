@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import classNames from 'classnames';
 import React from 'react';
 
@@ -14,7 +15,7 @@ export const ErrorNotification: React.FC<ErrorInterface> = ({
     <div
       data-cy="ErrorNotification"
       className={classNames('notification is-danger is-light', {
-        hidden: !errorState,
+        'hidden': !errorState,
       })}
     >
       <button

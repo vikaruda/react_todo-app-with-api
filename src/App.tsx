@@ -130,6 +130,8 @@ export const App: React.FC = () => {
   };
 
   const handleTodoDelete = (usersId: number) => {
+    setStateError('');
+
     setDelLoader(usersId);
     todosService
       .deleteTodos(usersId)
@@ -155,6 +157,8 @@ export const App: React.FC = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const updatedPost = (updatedPosts: Todo) => {
+    setStateError('');
+
     todosService
       .updatePost(updatedPosts)
       .then(post => {
@@ -172,6 +176,7 @@ export const App: React.FC = () => {
         setTimeout(() => setStateError(''), 3000);
       });
   };
+
 
   const toggleAllTodos = () => {
     const allCompleted = todoItem.every(todo => todo.completed);

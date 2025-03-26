@@ -26,7 +26,6 @@ export const App: React.FC = () => {
   const [delLoader, setDelLoader] = useState<number | null>(null);
   const activeCount = todoItem.filter(todo => !todo.completed);
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
-  const [chooseAllItem, setChooseAllItem] = useState(false);
   const [loaderApi, setLoaderApi] = useState(false);
 
   useEffect(() => {
@@ -190,7 +189,6 @@ export const App: React.FC = () => {
     Promise.all(updatePromises)
       .then(() => {
         setTodoItem(updatedTodos);
-        setChooseAllItem(!allCompleted);
       })
       .catch(() => {
         alert('Unable to update todos');
@@ -218,7 +216,6 @@ export const App: React.FC = () => {
           inputRef={inputRef}
           loadingNewItem={loadingNewItem}
           toggleAllTodos={toggleAllTodos}
-          chooseAllItem={chooseAllItem}
           todoItem={todoItem}
         />
 

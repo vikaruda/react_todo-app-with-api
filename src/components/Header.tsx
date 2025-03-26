@@ -9,7 +9,6 @@ interface HeaderProps {
   inputRef: React.RefObject<HTMLInputElement>;
   loadingNewItem: boolean;
   toggleAllTodos: () => void;
-  chooseAllItem: boolean;
   todoItem: Todo[];
 }
 
@@ -21,7 +20,6 @@ export const Header: React.FC<HeaderProps> = ({
   inputRef,
   loadingNewItem,
   toggleAllTodos,
-  chooseAllItem,
   todoItem,
 }) => {
   useEffect(() => {
@@ -30,12 +28,16 @@ export const Header: React.FC<HeaderProps> = ({
     }
   }, [loadingNewItem]);
 
+  // Перевіряємо, чи всі тудушки завершені
+  const isAllCompleted =
+    todoItem.length > 0 && todoItem.every(todo => todo.completed);
+
   return (
     <header className="todoapp__header">
       {todoItem.length > 0 && !loadingNewItem && (
         <button
           type="button"
-          className={`todoapp__toggle-all${chooseAllItem ? 'active' : ''}`}
+          className={`todoapp__toggle-all${isAllCompleted ? ' active' : ''}`}
           data-cy="ToggleAllButton"
           onClick={toggleAllTodos}
         />

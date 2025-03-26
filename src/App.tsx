@@ -183,15 +183,13 @@ export const App: React.FC = () => {
 
     setLoaderApi(true);
 
-    // Масив промісів для оновлення кожного туду
     const updatePromises = updatedTodos.map(todo =>
       todosService.updatePost(todo)
     );
 
-    // Очікуємо, поки всі оновлення завершаться
     Promise.all(updatePromises)
       .then(() => {
-        setTodoItem(updatedTodos); // Оновлюємо список тільки після успішного оновлення всіх тудушок
+        setTodoItem(updatedTodos);
         setChooseAllItem(!allCompleted);
       })
       .catch(() => {

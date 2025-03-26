@@ -175,10 +175,14 @@ export const App: React.FC = () => {
 
   const toggleAllTodos = () => {
     const allCompleted = todoItem.every(todo => todo.completed);
-    const updatedTodos = todoItem.map(todo => ({
+    const updatedTodos = allCompleted? todoItem.map(todo => ({
       ...todo,
       completed: !allCompleted,
-    }));
+    }))
+      : todoItem.filter(todo => !todo.completed).map(todo => ({
+        ...todo,
+        completed: true,
+      }));
 
     setLoaderApi(true);
 

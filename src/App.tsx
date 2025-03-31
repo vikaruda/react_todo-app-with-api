@@ -43,9 +43,12 @@ export const App: React.FC = () => {
         setStateError('');
       }, 3000);
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+      };
     }
   }, [errorState]);
+
 
   const getFilteredTodos = () => {
     if (filter === TodoFilter.Active) {
@@ -175,14 +178,10 @@ export const App: React.FC = () => {
 
   const toggleAllTodos = () => {
     const allCompleted = todoItem.every(todo => todo.completed);
-    const updatedTodos = allCompleted ? todoItem.map(todo => ({
+    const updatedTodos = todoItem.map(todo => ({
       ...todo,
-      completed: !allCompleted,
-    }))
-      : todoItem.filter(todo => !todo.completed).map(todo => ({
-        ...todo,
-        completed: true,
-      }));
+      completed: !allCompleted, // Інвертує стан для всіх
+    }));
 
     setLoaderApi(true);
 
@@ -193,9 +192,6 @@ export const App: React.FC = () => {
     Promise.all(updatePromises)
       .then(() => {
         setTodoItem(updatedTodos);
-      })
-      .catch(() => {
-        alert('Unable to update todos');
       })
       .finally(() => {
         setLoaderApi(false);

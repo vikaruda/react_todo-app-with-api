@@ -26,7 +26,7 @@ export const TodoItem: React.FC<TodoIt> = ({
   handleTodoDelete,
   arrTodos,
   delLoader,
-  toggleAllTodos,
+  // toggleAllTodos,
   loaderApi,
   updatedPost,
 }) => {
@@ -103,7 +103,7 @@ export const TodoItem: React.FC<TodoIt> = ({
             const updatedTodo = { ...tempTodo, completed: !tempTodo.completed };
 
             toggleTodo(tempTodo.id);
-            toggleAllTodos();
+            // toggleAllTodos();
             updatedPost(updatedTodo);
           }}
         >

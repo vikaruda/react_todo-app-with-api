@@ -175,7 +175,7 @@ export const App: React.FC = () => {
 
   const toggleAllTodos = () => {
     const allCompleted = todoItem.every(todo => todo.completed);
-    const updatedTodos = allCompleted? todoItem.map(todo => ({
+    const updatedTodos = allCompleted ? todoItem.map(todo => ({
       ...todo,
       completed: !allCompleted,
     }))

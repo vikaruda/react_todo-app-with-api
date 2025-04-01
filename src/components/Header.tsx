@@ -28,7 +28,6 @@ export const Header: React.FC<HeaderProps> = ({
     }
   }, [loadingNewItem]);
 
-  // Перевіряємо, чи всі тудушки завершені
   const isAllCompleted =
     todoItem.length > 0 && todoItem.every(todo => todo.completed);
 

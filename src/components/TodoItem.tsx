@@ -69,7 +69,7 @@ export const TodoItem: React.FC<TodoIt> = ({
       return;
     }
 
-    const updatedTodo = { ...tempTodo, title: editValue };
+    const updatedTodo = { ...tempTodo, title: editValue.trim() };
 
     // Увімкнення лоадера
     setLoader(true);
@@ -130,6 +130,12 @@ export const TodoItem: React.FC<TodoIt> = ({
               value={editValue}
               onChange={e => setEditValue(e.target.value)}
               onBlur={handleEditSubmit}
+              onKeyDown={e => {
+                if (e.key === 'Escape') {
+                  setIsEditing(false);
+                  setEditValue(tempTodo.title);
+                }
+              }}
               autoFocus
             />
           </form>

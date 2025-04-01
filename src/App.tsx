@@ -49,7 +49,6 @@ export const App: React.FC = () => {
     }
   }, [errorState]);
 
-
   const getFilteredTodos = () => {
     if (filter === TodoFilter.Active) {
       return todoItem.filter(todo => !todo.completed);
@@ -175,29 +174,36 @@ export const App: React.FC = () => {
       });
   };
 
-
   const toggleAllTodos = () => {
-    const allCompleted = todoItem.every(todo => todo.completed);
-    const updatedTodos = todoItem.map(todo => ({
-      ...todo,
-      completed: !allCompleted, // Інвертує стан для всіх
-    }));
+    const hasIncomplete = todoItem.some(todo => !todo.completed);
+
+    const updatedTodos = todoItem
+      .filter(todo => todo.completed !== hasIncomplete) // Оновлюємо тільки ті, що потрібно
+      .map(todo => ({
+        ...todo,
+        completed: hasIncomplete,
+      }));
 
     setLoaderApi(true);
 
     const updatePromises = updatedTodos.map(todo =>
-      todosService.updatePost(todo)
+      todosService.updatePost(todo),
     );
 
     Promise.all(updatePromises)
       .then(() => {
-        setTodoItem(updatedTodos);
+        setTodoItem(prev =>
+          prev.map(todo =>
+            updatedTodos.some(updated => updated.id === todo.id)
+              ? { ...todo, completed: hasIncomplete }
+              : todo,
+          ),
+        );
       })
       .finally(() => {
         setLoaderApi(false);
       });
   };
-
 
   if (!todosService.USER_ID) {
     return <UserWarning />;

@@ -21,7 +21,7 @@ interface TodoIt {
 export const TodoItem: React.FC<TodoIt> = ({
   tempTodo,
   isTempTodo,
-  setControlChecked,
+  // setControlChecked,
   setTodoItem,
   handleTodoDelete,
   arrTodos,
@@ -35,11 +35,6 @@ export const TodoItem: React.FC<TodoIt> = ({
   const [loader, setLoader] = useState(false);
 
   const toggleTodo = (id: number) => {
-    // Локально змінюємо стан чекбокса, щоб дати миттєвий візуальний фідбек
-    setControlChecked(prev =>
-      prev.includes(id) ? prev.filter(todoId => todoId !== id) : [...prev, id],
-    );
-
     const todoToUpdate = { ...tempTodo, completed: !tempTodo.completed };
 
     setLoader(true);
@@ -55,7 +50,6 @@ export const TodoItem: React.FC<TodoIt> = ({
         );
       })
       .finally(() => {
-        setControlChecked(prev => prev.filter(todoId => todoId !== id));
         setLoader(false);
       });
   };

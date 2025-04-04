@@ -105,8 +105,8 @@ export const App: React.FC = () => {
         setStateError('Unable to add a todo');
       })
       .finally(() => {
-        setLoadingNewItem(false); // Stop loading
-        setTempTodo(null); // Reset tempTodo
+        setLoadingNewItem(false);
+        setTempTodo(null);
         setTimeout(() => {
           setArrTodos([]);
         }, 1000);
@@ -178,7 +178,7 @@ export const App: React.FC = () => {
     const hasIncomplete = todoItem.some(todo => !todo.completed);
 
     const updatedTodos = todoItem
-      .filter(todo => todo.completed !== hasIncomplete) // Оновлюємо тільки ті, що потрібно
+      .filter(todo => todo.completed !== hasIncomplete)
       .map(todo => ({
         ...todo,
         completed: hasIncomplete,
@@ -235,9 +235,9 @@ export const App: React.FC = () => {
             handleTodoDelete={handleTodoDelete}
             arrTodos={arrTodos}
             delLoader={delLoader}
-            toggleAllTodos={toggleAllTodos}
             loaderApi={loaderApi}
             updatedPost={updatedPost}
+            setStateError={setStateError}
           />
         </section>
 

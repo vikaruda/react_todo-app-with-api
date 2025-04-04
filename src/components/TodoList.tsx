@@ -11,9 +11,9 @@ interface List {
   handleTodoDelete: (usersId: number) => void;
   arrTodos: number[];
   delLoader: number | null;
-  toggleAllTodos: () => void;
   loaderApi: boolean;
   updatedPost: (updatedPosts: Todo) => void;
+  setStateError: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const TodoList: React.FC<List> = ({
@@ -25,9 +25,9 @@ export const TodoList: React.FC<List> = ({
   handleTodoDelete,
   arrTodos,
   delLoader,
-  toggleAllTodos,
   loaderApi,
   updatedPost,
+  setStateError,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -54,9 +54,9 @@ export const TodoList: React.FC<List> = ({
           handleTodoDelete={handleTodoDelete}
           arrTodos={arrTodos}
           delLoader={delLoader}
-          toggleAllTodos={toggleAllTodos}
           loaderApi={loaderApi}
           updatedPost={updatedPost}
+          setStateError={setStateError}
         />
       ))}
 
@@ -70,9 +70,9 @@ export const TodoList: React.FC<List> = ({
           arrTodos={arrTodos}
           delLoader={delLoader}
           isTempTodo={true}
-          toggleAllTodos={toggleAllTodos}
           loaderApi={loaderApi}
           updatedPost={updatedPost}
+          setStateError={setStateError}
         />
       )}
     </>

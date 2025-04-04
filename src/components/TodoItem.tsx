@@ -13,43 +13,45 @@ interface TodoIt {
   handleTodoDelete: (usersId: number) => void;
   arrTodos: number[];
   delLoader: number | null;
-  toggleAllTodos: () => void;
   loaderApi: boolean;
   updatedPost: (updatedPosts: Todo) => void;
+  setStateError: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const TodoItem: React.FC<TodoIt> = ({
   tempTodo,
   isTempTodo,
-  // setControlChecked,
+  setControlChecked,
   setTodoItem,
   handleTodoDelete,
   arrTodos,
   delLoader,
-  // toggleAllTodos,
   loaderApi,
   updatedPost,
+  setStateError,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(tempTodo.title);
   const [loader, setLoader] = useState(false);
 
   const toggleTodo = (id: number) => {
+    setControlChecked(prev =>
+      prev.includes(id) ? prev.filter(todoId => todoId !== id) : [...prev, id],
+    );
+
     const todoToUpdate = { ...tempTodo, completed: !tempTodo.completed };
 
     setLoader(true);
 
     todosService
       .updatePost(todoToUpdate)
-      .then(() => {
-        // Оновлюємо список тудушок тільки після успішного запиту
+      .then(newTodo => {
         setTodoItem(prevItems =>
-          prevItems.map(todo =>
-            todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-          ),
+          prevItems.map(todo => (todo.id === id ? newTodo : todo)),
         );
       })
       .finally(() => {
+        setControlChecked(prev => prev.filter(todoId => todoId !== id));
         setLoader(false);
       });
   };
@@ -65,7 +67,6 @@ export const TodoItem: React.FC<TodoIt> = ({
 
     const updatedTodo = { ...tempTodo, title: editValue.trim() };
 
-    // Увімкнення лоадера
     setLoader(true);
 
     todosService
@@ -74,9 +75,13 @@ export const TodoItem: React.FC<TodoIt> = ({
         setTodoItem(prevItems =>
           prevItems.map(todo => (todo.id === tempTodo.id ? updatedTodo : todo)),
         );
+        setIsEditing(false);
+      })
+      .catch(() => {
+        setStateError('Unable to update a todo');
+        setTimeout(() => setStateError(''), 3000);
       })
       .finally(() => {
-        setIsEditing(false);
         setLoader(false);
       });
   };
@@ -128,6 +133,16 @@ export const TodoItem: React.FC<TodoIt> = ({
                 if (e.key === 'Escape') {
                   setIsEditing(false);
                   setEditValue(tempTodo.title);
+                }
+
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+
+                  if (editValue.trim() === tempTodo.title.trim()) {
+                    setIsEditing(false);
+                  } else {
+                    handleEditSubmit();
+                  }
                 }
               }}
               autoFocus
